@@ -1,5 +1,6 @@
 #!/bin/bash
-# this script scales spotify, customize config file path and scaling factor below.
+# This script scales spotify UI - works with ints and floats.
+# Customize config file path and scaling factor below.
 
 #SPOTCONF_PATH="/usr/share/applications/spotify.desktop"
 SPOTCONF_PATH="./spotify.desktop"
@@ -10,8 +11,8 @@ GREPOUT=`sudo grep "${SEARCH_STRING}" ${SPOTCONF_PATH}`
 if [ -z "$GREPOUT" ]
 then
 	echo "String ${SEARCH_STRING} wasn't found in the given file."
-	SEARCH_STRING="spotify --force-device-scale-factor=. %U" 
-	GREPOUT=`sudo grep "${SEARCH_STRING}" ${SPOTCONF_PATH}`
+	SEARCH_STRING="spotify --force-device-scale-factor=[+-]?([0-9]*[.])?[0-9]+ %U" 
+	GREPOUT=`sudo grep -E "${SEARCH_STRING}" ${SPOTCONF_PATH}`
 	if [ -z "$GREPOUT" ]
 	then
 		echo "String ${SEARCH_STRING} wasn't found in the given file, terminating."
@@ -25,7 +26,7 @@ read -p "Is that ok? Type y or Y for confirmation." -n 1 -r
 echo    # move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	sudo sed -i "s/${SEARCH_STRING}$/spotify --force-device-scale-factor=${SPOT_SCALE} %U/" ${SPOTCONF_PATH}
+	sudo sed -E -i "s/${SEARCH_STRING}$/spotify --force-device-scale-factor=${SPOT_SCALE} %U/" ${SPOTCONF_PATH}
 	echo "Operation executed."
 	exit 0
 else
