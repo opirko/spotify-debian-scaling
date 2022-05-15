@@ -16,11 +16,13 @@ readarray -d '' FILEARRAY < <(find /usr/share/ -name "spotify.desktop" -print0)
 
 for i in "${FILEARRAY[@]}"
 do
+	# reset search string to the default one
+	SEARCH_STRING=$SEARCH_STRING_ORIG
 	echo -e "${YELLOW}Found file $i to change.${NC}"
-	GREPOUT=`sudo grep "${SEARCH_STRING_ORIG}" ${i}`
+	GREPOUT=`sudo grep "${SEARCH_STRING}" ${i}`
 	if [ -z "$GREPOUT" ]
 	then
-		echo -e "String \"${CYAN}${SEARCH_STRING_ORIG}${NC}\" wasn't found in the given file."
+		echo -e "String \"${CYAN}${SEARCH_STRING}${NC}\" wasn't found in the given file."
 		SEARCH_STRING="spotify --force-device-scale-factor=[+-]?([0-9]*[.])?[0-9]+ %U" 
 		GREPOUT=`sudo grep -E "${SEARCH_STRING}" ${i}`
 		if [ -z "$GREPOUT" ]
