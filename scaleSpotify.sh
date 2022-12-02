@@ -12,7 +12,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Colour
 
 # find the files, typically two
-readarray -d '' FILEARRAY < <(find /usr/share/ -name "spotify.desktop" -print0)
+readarray -d '' FILEARRAY < <(find /usr/share/ -name "spotify.desktop" -print0 2>/dev/null)
 
 for i in "${FILEARRAY[@]}"
 do
